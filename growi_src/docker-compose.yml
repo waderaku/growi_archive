@@ -2,11 +2,9 @@ version: '3'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: waderaku/growi_app:latest
     ports:
-      - 127.0.0.1:3000:3000    # localhost only by default
+      - 80:3000    # localhost only by default
     links:
       - mongo:mongo
       - elasticsearch:elasticsearch
@@ -38,16 +36,14 @@ services:
       - growi_data:/data
 
   mongo:
-    image: mongo:6.0
+    image: waderaku/mongo:latest
     restart: unless-stopped
     volumes:
       - mongo_configdb:/data/configdb
       - mongo_db:/data/db
 
   elasticsearch:
-    build:
-      context: ./elasticsearch/v8
-      dockerfile: ./Dockerfile
+    image: waderaku/elasticsearch:latest
     environment:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"  # increase amount if you have enough memory
